@@ -2,7 +2,7 @@
 
 import React from "react";
 import { CustomTooltipProps, DonutChart, Legend } from "@tremor/react";
-import { ProgramGoals } from "@prisma/client";
+import { PrismaClient, ProgramGoals } from "@prisma/client";
 
 type Props = {
   items: ProgramGoals[];

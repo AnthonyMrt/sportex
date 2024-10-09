@@ -122,7 +122,6 @@ model ProgramGoals {
   Seance         Seance[]
 }
 
-
 model Seance {
   id     String       @id @default(cuid())
   date   DateTime     @unique
