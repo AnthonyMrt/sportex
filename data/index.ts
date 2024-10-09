@@ -6,7 +6,6 @@ import { getUserByEmail } from "./auth";
 import bcrypt from "bcryptjs";
 import { CustomerStatus, STATUS, UserRole } from "@prisma/client";
 import { Resend } from "resend";
-import { custom } from "zod";
 
 export const getCurrentUser = async () => {
   try {
