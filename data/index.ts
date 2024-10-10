@@ -144,7 +144,7 @@ export const createNewCustomer = async (data: {
         });
         return addCustomer;
       },
-      { maxWait: 5000, timeout: 10000 }
+      { maxWait: 5000, timeout: 20000 }
     );
 
     return customer;
@@ -380,7 +380,7 @@ export const updatedGoalPositions = async (
           console.log("Error in updatedGoalPositions | Transaction: ", error);
         }
       },
-      { maxWait: 5000, timeout: 10000 }
+      { maxWait: 5000, timeout: 20000 }
     );
 
     return true;
