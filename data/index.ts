@@ -95,11 +95,6 @@ export const getCurrentCoach = async () => {
   }
 };
 
-import bcrypt from "bcrypt";
-import { db } from "./db"; // Adjust the import based on your project structure
-import { getUserByEmail, getCurrentUser } from "./userUtils"; // Adjust the import based on your project structure
-import { UserRole } from "./constants"; // Adjust the import based on your project structure
-
 export const createNewCustomer = async (data: {
   name: string;
   email: string;
