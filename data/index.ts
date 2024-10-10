@@ -95,6 +95,11 @@ export const getCurrentCoach = async () => {
   }
 };
 
+import bcrypt from "bcrypt";
+import { db } from "./db"; // Adjust the import based on your project structure
+import { getUserByEmail, getCurrentUser } from "./userUtils"; // Adjust the import based on your project structure
+import { UserRole } from "./constants"; // Adjust the import based on your project structure
+
 export const createNewCustomer = async (data: {
   name: string;
   email: string;
@@ -106,15 +111,21 @@ export const createNewCustomer = async (data: {
   Weight: string;
 }) => {
   try {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    const existingUser = await getUserByEmail(data.email);
+    console.log("Starting createNewCustomer transaction");
+    const start = Date.now();
 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    console.log(`Hashed password in ${Date.now() - start} ms`);
+
+    const existingUser = await getUserByEmail(data.email);
     if (existingUser) throw new Error("User already exists");
+    console.log(`Checked existing user in ${Date.now() - start} ms`);
 
     const customer = await db.$transaction(
       async (db) => {
         const user = await getCurrentUser();
         if (!user || !user.currentSpeciality) throw new Error("User not found");
+        console.log(`Fetched current user in ${Date.now() - start} ms`);
 
         const addUser = await db.user.create({
           data: {
@@ -126,6 +137,7 @@ export const createNewCustomer = async (data: {
             currentSpeciality: user.currentSpeciality,
           },
         });
+        console.log(`Created user in ${Date.now() - start} ms`);
 
         const addCustomer = await db.customer.create({
           data: {
@@ -142,11 +154,14 @@ export const createNewCustomer = async (data: {
             userId: addUser.id,
           },
         });
+        console.log(`Created customer in ${Date.now() - start} ms`);
+
         return addCustomer;
       },
-      { maxWait: 5000, timeout: 20000 }
+      { maxWait: 10000, timeout: 30000 }
     );
 
+    console.log(`Transaction completed in ${Date.now() - start} ms`);
     return customer;
   } catch (error) {
     console.log("Error in createNewCustomer: ", error);
